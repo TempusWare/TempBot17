@@ -47,17 +47,18 @@ client.on('message', message => {
     message.channel.send('From ' + message.author.username + ': ' + args[1])
   }*/
   if(commandIs('count', message)){
-    if(message.content.length < 56){
-      message.reply("It fits.")
+    var commandCount = message.content.length - 7;
+    if(commandCount < 48){
+      message.reply("It fits. *(Character Count: `" + commandCount + "`)*")
     } else {
-      message.reply("Too long, try shortening it or breaking it into multiple lines.")
+      message.reply("Too long, try shortening it or breaking it into multiple lines. *(Character Count: `" + commandCount + "`)*")
     }
   }
   if(commandIs('avatar', message)){
     message.reply(message.author.avatarURL)
   }
   if(commandIs('help', message)){
-    message.author.sendMessage({embed});
+    message.author.send({embed});
     message.reply("A list of my commands has been sent to your Private Messages.")
   }
 /*  if(commandIs('cast', message)){
@@ -74,19 +75,35 @@ client.on('message', message => {
     message.channel.sendMessage(message.guild.member(message.mentions.users.first()) + " has wrapped up.");
     console.log(`Removed ${message.guild.member(message.mentions.users.first())} from cast.`);
   }*/
-//  if(commandIs('wrapup', message)){
-//    let actorID = "337538000374333451";
-//    let actorCast = message.guild.roles.get(actorID).members;
-//    console.log(`Got ${actorCast.size} members with that role.`);
-//    actorMember.removeRole(actorRole);
-//  }
   if(commandIs("purge", message)){
-    if(hasRole(message.member, "Admin")){
+    if(hasRole(message.member, "Admin") || (hasRole(message.member, "admin"))){
       message.channel.bulkDelete(100);
+      message.channel.send("Past 100 messages have been deleted.")
     } else {
       message.reply('You do not have required permissions to use this command.')
     }
   }
+  /*if(commandIs("settask", message)){
+    if(args.length === 1){
+      message.channel.send("You did not define an argument. Usage: `-updatetask [Title] [Role] [Username]`")
+    } else if(args.length === 4 && args[2] === "Writer"){
+      message.channel.send(args[1] + " | " + args[2] + ": " + args[3])
+    } else if(args.length === 4 && args[2] === "Filmer"){
+      message.channel.send(args[1] + " | " + args[2] + ": " + args[3])
+    } else {
+      message.channel.send("There was an error.")
+    }
+  }
+  if(commandIs("updatetask", message)){
+    if(args.length === 1){
+      message.channel.sendMessage("You did not define an argument. Usage: `-updatetask [Title] [Role] [Username]`")
+    } else if(args.length === 4){
+      let taskInfo = message.content.find("includes", args[1]);
+      message.channel.sendMessage("Found message.")
+    } else {
+      message.channel.sendMessage("Denied.")
+    }
+  }*/
 });
 
 client.login(process.env.TOKEN)
