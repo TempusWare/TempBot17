@@ -29,16 +29,17 @@ const embed = new Discord.RichEmbed()
   .addField("-cast", "Adds a 'Filming' role to the mentioned user. Usage: `-cast [@username]` (Disabled Currently)")
   .addField("-wrapup", "Removes the 'Filming' role from the mentioned user. Usage: `-wrapup [@username]` (Disabled Currently)")
   .addField("-purge", "Deletes the past 100 messages. Cannot delete messages over 2 weeks old. Usage: `-purge`")
+  .addField("-timezone", "Replies with the current time in a timezone. Usage: `-timezone [timezone abbreviations]` (Work in Progress)")
   .setFooter("beep boop REEEEEEEEEEEEEEEEEEEEEEE")
   .setTimestamp()
 
 client.on('ready', () => {
   console.log('Bot Started.');
-  client.user.setGame('Ping Pong')
+  client.user.setGame('Ping Pong');
 });
 
 client.on('message', message => {
-  var args = message.content.split(/[ ]+/);
+  let args = message.content.split(" ").slice(0)
   if(commandIs('ping', message) || commandIs('pong', message)){
     message.reply("Pong! :ping_pong:");
     console.log(`Pinged ${message.author}.`)
@@ -104,6 +105,35 @@ client.on('message', message => {
       message.channel.sendMessage("Denied.")
     }
   }*/
+  if(commandIs("timezone", message)){
+    var timezoneGet = new Date();
+    timezoneHours = timezoneGet.getUTCHours();
+    timezoneMinutes = timezoneGet.getUTCMinutes();
+    if(timezoneHours < 24){
+      if (args.length === 1){
+        message.channel.send("Error. List of timezones available: `UTC | AEST | BST | PST | EST`")
+      } else if(args[1] === "UTC") {
+        message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" UTC")
+      } else if (args[1] === "AEST") {
+        var timezoneHours = timezoneHours + 10;
+        message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" AEST")
+      } else if (args[1] === "BST") {
+        var timezoneHours = timezoneHours + 1;
+        message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" BST")
+      } else if (args[1] === "EST") {
+        var timezoneHours = timezoneHours - 4;
+        message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" EST")
+      } else if (args[1] === "NZST") {
+        var timezoneHours = timezoneHours + 12;
+        message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" NZST")
+      } else if (args[1] === "PST") {
+        var timezoneHours = timezoneHours - 7;
+        message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" PST")
+      } else {
+        message.channel.send("Error. List of timezones available: `UTC | AEST | BST | PST | EST`")
+      }
+    }
+  }
 });
 
 client.login(process.env.TOKEN)
