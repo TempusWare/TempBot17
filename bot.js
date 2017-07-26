@@ -1,16 +1,35 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
+const PREFIX = "-";
 
-function commandIs(str, msg){
-  return msg.content.toLowerCase().startsWith("-" + str);
-}
+var responses = [
+  "It is certain.",
+  "It is decidedly so.",
+  "Without a doubt.",
+  "Yes definitely.",
+  "You may rely on it.",
+  "As I see it, yes.",
+  "Most likely.",
+  "Outlook good.",
+  "Yes.",
+  "Signs point to yes.",
+  "Reply hazy try again.",
+  "Ask again later.",
+  "Better not tell you now.",
+  "Cannot predict now.",
+  "Concentrate and ask again.",
+  "Don't count on it.",
+  "My reply is no.",
+  "My sources say no.",
+  "Outlook not so good.",
+  "Very doubtful.",
+];
 
 function perms(array) {
   return array.map(function(item){
     return item["name"]
   })
 }
-
 function hasRole(member, role) {
   if(perms(member.roles).includes(role)){
     return true;
@@ -19,50 +38,141 @@ function hasRole(member, role) {
   }
 }
 
-const embed = new Discord.RichEmbed()
-  .setAuthor("TempBot", "http://i.imgur.com/JOUdoSf.png")
-  .setTitle("List of available commands:")
-  .setColor(0x78F7FE)
-  .setThumbnail("http://i.imgur.com/IjgeTrM.png")
-  .addField("-avatar", "Replies with your Discord avatar in case you lost it. Usage: `-avatar`")
-  .addField("-count", "Replies with if your message is over 48 characters. Usage: `-count [message]`")
-  .addField("-cast", "Adds a 'Filming' role to the mentioned user. Usage: `-cast [@username]` (Disabled Currently)")
-  .addField("-wrapup", "Removes the 'Filming' role from the mentioned user. Usage: `-wrapup [@username]` (Disabled Currently)")
-  .addField("-purge", "Deletes the past 100 messages. Cannot delete messages over 2 weeks old. Usage: `-purge`")
-  .addField("-timezone", "Replies with the current time in a timezone. Usage: `-timezone [timezone abbreviations]` (Work in Progress)")
-  .setFooter("beep boop REEEEEEEEEEEEEEEEEEEEEEE")
-  .setTimestamp()
+const embedHelp = new Discord.RichEmbed();
+embedHelp.setAuthor("TempBot", "http://i.imgur.com/JOUdoSf.png")
+.setTitle("List of available commands:")
+.setColor(0x78F7FE)
+.setThumbnail("http://i.imgur.com/IjgeTrM.png")
+.addField("-avatar", "Replies with your Discord avatar in case you lost it. Usage: `-avatar`")
+.addField("-count", "Replies with if your message is over 48 characters. Usage: `-count [message]`")
+//.addField("-cast", "Adds a 'Filming' role to the mentioned user. Usage: `-cast [@username]` (Disabled Currently)")
+//.addField("-wrapup", "Removes the 'Filming' role from the mentioned user. Usage: `-wrapup [@username]` (Disabled Currently)")
+.addField("-purge", "Deletes the past 100 messages. Cannot delete messages over 2 weeks old. Requires `Admin` Role. Usage: `-purge`")
+.addField("-timezone", "Replies with the current time in a timezone. Usage: `-timezone [timezone abbreviation]`")
+.setFooter("beep boop REEEEEEE")
+.setTimestamp()
 
 client.on('ready', () => {
   console.log('Bot Started.');
-  client.user.setGame('Ping Pong');
+  client.user.setGame("-help");
 });
 
 client.on('message', message => {
-  let args = message.content.split(" ").slice(0)
-  if(commandIs('ping', message) || commandIs('pong', message)){
-    message.reply("Pong! :ping_pong:");
-    console.log(`Pinged ${message.author}.`)
+  if (message.author.equals(client.user)) return;
+
+  if (!message.content.startsWith(PREFIX)) return;
+
+  var args = message.content.substring(PREFIX.length).split(" ");
+
+  switch (args[0].toLowerCase()) {
+    case "ping":
+      message.reply("Pong! :ping_pong:")
+      break;
+    case "8ball":
+      if (args[1]) {
+        message.reply(responses[Math.floor(Math.random() * responses.length)])
+      } else {
+        message.reply("Error.")
+      }
+      break;
+    case "count":
+      var messageCount = message.content.length - 7;
+      if (messageCount <= 48) {
+        message.reply("It fits. *(Character Count: `" + messageCount + "`)*")
+      } else {
+        message.reply("Too long, try shortening it or breaking it into multiple lines. *(Character Count: `" + messageCount + "`)*")
+      }
+      break;
+    case "avatar":
+      var userMentioned = message.mentions.users.first()
+      if (!userMentioned) {
+        message.reply(message.author.avatarURL)
+      } else {
+        message.reply(userMentioned.avatarURL)
+      }
+      break;
+    case "serverinfo":
+      var embedServerInfo = new Discord.RichEmbed();
+      embedServerInfo.addField("Server Name", message.guild.name)
+      .setColor("7289DA")
+      .addField("Server Owner", message.guild.owner.user.username)
+      .addField("Amount of Roles", message.guild.roles.filter(r => r.name).size)
+      .addField("Created on", message.guild.createdAt)
+      .setThumbnail(message.guild.iconURL)
+      .setTimestamp()
+      message.channel.sendEmbed(embedServerInfo)
+      break;
+    case "help":
+      message.channel.sendEmbed(embedHelp);
+      message.reply("A list of my commands has been sent to your Private Messages.")
+      break;
+    case "purge":
+      if (hasRole(message.member, "Admin")) {
+        message.channel.bulkDelete(100);
+        console.log("Deleted 100 messages in " + message.channel.id)
+      } else {
+        message.reply("You do not have the required role to use this command.")
+      }
+      break;
+    case "timezone":
+      var timezoneGet = new Date();
+      timezoneHours = timezoneGet.getUTCHours();
+      timezoneMinutes = timezoneGet.getUTCMinutes();
+        if (!args[1]) {
+          message.channel.send("Error. List of timezones available: `UTC | AEST | BST | EST | MST | PST`")
+        } else {
+        switch (args[1].toUpperCase()) {
+          case "UTC":
+            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" UTC")
+            break;
+          case "AEST":
+            var timezoneHours = timezoneHours + 10;
+            if (timezoneHours > 12) {
+              var timezoneHours = timezoneHours - 24;
+            }
+            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" AEST")
+            break;
+          case "BST":
+            var timezoneHours = timezoneHours + 1;
+            if (!timezoneHours > 12) {
+              var timezoneHours = timezoneHours - 24;
+            }
+            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" BST")
+            break;
+          case "CST":
+            var timezoneHours = timezoneHours - 5;
+            if (!timezoneHours > 12) {
+              var timezoneHours = timezoneHours + 12;
+            }
+            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" CST")
+            break;
+          case "EST":
+            var timezoneHours = timezoneHours - 4;
+            if (!timezoneHours > 12) {
+              var timezoneHours = timezoneHours + 12;
+            }
+            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" EST")
+            break;
+          case "MST":
+            var timezoneHours = timezoneHours - 6;
+            if (!timezoneHours > 12) {
+              var timezoneHours = timezoneHours + 12;
+            }
+            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" MST")
+            break;
+          case "PST":
+            var timezoneHours = timezoneHours - 7;
+            if (!timezoneHours > 12) {
+              var timezoneHours = timezoneHours + 12;
+            }
+            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" PST")
+            break;
+          default: message.channel.send("Error. List of timezones available: `UTC | AEST | BST | EST | MST | PST`")
+        }
+      }
+      break;
   }
-/*  if(commandIs('say', message)){
-    message.channel.send('From ' + message.author.username + ': ' + args[1])
-  }*/
-  if(commandIs('count', message)){
-    var commandCount = message.content.length - 7;
-    if(commandCount < 48){
-      message.reply("It fits. *(Character Count: `" + commandCount + "`)*")
-    } else {
-      message.reply("Too long, try shortening it or breaking it into multiple lines. *(Character Count: `" + commandCount + "`)*")
-    }
-  }
-  if(commandIs('avatar', message)){
-    message.reply(message.author.avatarURL)
-  }
-  if(commandIs('help', message)){
-    message.author.send({embed});
-    message.reply("A list of my commands has been sent to your Private Messages.")
-  }
-/*  if(commandIs('cast', message)){
+  /*if(commandIs('cast', message)){
     let actorMember = message.guild.member(message.mentions.users.first());
     let actorRole = message.guild.roles.find("name", "Filming");
     actorMember.addRole(actorRole);
@@ -76,14 +186,6 @@ client.on('message', message => {
     message.channel.sendMessage(message.guild.member(message.mentions.users.first()) + " has wrapped up.");
     console.log(`Removed ${message.guild.member(message.mentions.users.first())} from cast.`);
   }*/
-  if(commandIs("purge", message)){
-    if(hasRole(message.member, "Admin") || (hasRole(message.member, "admin"))){
-      message.channel.bulkDelete(100);
-      message.channel.send("Past 100 messages have been deleted.")
-    } else {
-      message.reply('You do not have required permissions to use this command.')
-    }
-  }
   /*if(commandIs("settask", message)){
     if(args.length === 1){
       message.channel.send("You did not define an argument. Usage: `-updatetask [Title] [Role] [Username]`")
@@ -105,35 +207,8 @@ client.on('message', message => {
       message.channel.sendMessage("Denied.")
     }
   }*/
-  if(commandIs("timezone", message)){
-    var timezoneGet = new Date();
-    timezoneHours = timezoneGet.getUTCHours();
-    timezoneMinutes = timezoneGet.getUTCMinutes();
-    if(timezoneHours < 24){
-      if (args.length === 1){
-        message.channel.send("Error. List of timezones available: `UTC | AEST | BST | PST | EST`")
-      } else if(args[1] === "UTC") {
-        message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" UTC")
-      } else if (args[1] === "AEST") {
-        var timezoneHours = timezoneHours + 10;
-        message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" AEST")
-      } else if (args[1] === "BST") {
-        var timezoneHours = timezoneHours + 1;
-        message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" BST")
-      } else if (args[1] === "EST") {
-        var timezoneHours = timezoneHours - 4;
-        message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" EST")
-      } else if (args[1] === "NZST") {
-        var timezoneHours = timezoneHours + 12;
-        message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" NZST")
-      } else if (args[1] === "PST") {
-        var timezoneHours = timezoneHours - 7;
-        message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" PST")
-      } else {
-        message.channel.send("Error. List of timezones available: `UTC | AEST | BST | PST | EST`")
-      }
-    }
-  }
 });
+
+
 
 client.login(process.env.TOKEN)
