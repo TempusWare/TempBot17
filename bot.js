@@ -127,50 +127,86 @@ client.on('message', message => {
             break;
           case "AEST":
             var timezoneHours = timezoneHours + 10;
-            if (timezoneHours > 12) {
+            if (timezoneHours > 24) {
               var timezoneHours = timezoneHours - 24;
             }
-            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" AEST")
+            if (timezoneHours > 12) {
+              var timezoneHours = timezoneHours - 12;
+              message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"pm AEST")
+            } else {
+              message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"am AEST")
+            }
             break;
           case "BST":
             var timezoneHours = timezoneHours + 1;
-            if (!timezoneHours > 12) {
+            if (timezoneHours > 24) {
               var timezoneHours = timezoneHours - 24;
             }
-            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" BST")
+            if (timezoneHours > 12) {
+              var timezoneHours = timezoneHours - 12;
+              message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"pm BST")
+            } else {
+              message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"am BST")
+            }
             break;
           case "CST":
             var timezoneHours = timezoneHours - 5;
-            if (!timezoneHours > 12) {
+            if (timezoneHours > 24) {
               var timezoneHours = timezoneHours + 12;
             }
-            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" CST")
+            if (timezoneHours > 12) {
+              var timezoneHours = timezoneHours - 12;
+              message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"pm CST")
+            } else {
+              message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"am CST")
+            }
             break;
           case "EST":
             var timezoneHours = timezoneHours - 4;
-            if (!timezoneHours > 12) {
+            if (timezoneHours > 24) {
               var timezoneHours = timezoneHours + 12;
             }
-            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" EST")
+            if (timezoneHours > 12) {
+              var timezoneHours = timezoneHours - 12;
+              message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"pm EST")
+            } else {
+              message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"am EST")
+            }
             break;
           case "MST":
             var timezoneHours = timezoneHours - 6;
-            if (!timezoneHours > 12) {
+            if (timezoneHours > 24) {
               var timezoneHours = timezoneHours + 12;
             }
-            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" MST")
+            if (timezoneHours > 12) {
+              var timezoneHours = timezoneHours - 12;
+              message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"pm MST")
+            } else {
+              message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"am MST")
+            }
             break;
           case "PST":
             var timezoneHours = timezoneHours - 7;
-            if (!timezoneHours > 12) {
+            if (timezoneHours < 24) {
               var timezoneHours = timezoneHours + 12;
             }
-            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+" PST")
+            if (timezoneHours > 12) {
+              var timezoneHours = timezoneHours - 12;
+              message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"pm PST")
+            } else {
+              message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"am PST")
+            }
             break;
           default: message.channel.send("Error. List of timezones available: `UTC | AEST | BST | EST | MST | PST`")
+          }
         }
-      }
-      break;
+        break;
+      case "task":
+        if (!args[1]) {
+          message.channel.send("Error. List of timezones available: `UTC | AEST | BST | EST | MST | PST`")
+        } else {
+
+        }
   }
   /*if(commandIs('cast', message)){
     let actorMember = message.guild.member(message.mentions.users.first());
