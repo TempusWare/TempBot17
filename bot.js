@@ -151,6 +151,156 @@ client.on('message', message => {
         case 9:
         timezoneMinutes = "09"
         break;
+        case 10:
+        timezoneMinutes = "10"
+        break;
+        case 11:
+        timezoneMinutes = "11"
+        break;
+        case 12:
+        timezoneMinutes = "12"
+        break;
+        case 13:
+        timezoneMinutes = "13"
+        break;
+        case 14:
+        timezoneMinutes = "14"
+        break;
+        case 15:
+        timezoneMinutes = "15"
+        break;
+        case 16:
+        timezoneMinutes = "16"
+        break;
+        case 17:
+        timezoneMinutes = "17"
+        break;
+        case 18:
+        timezoneMinutes = "18"
+        break;
+        case 19:
+        timezoneMinutes = "19"
+        break;
+        case 20:
+        timezoneMinutes = "20"
+        break;
+        case 21:
+        timezoneMinutes = "21"
+        break;
+        case 22:
+        timezoneMinutes = "22"
+        break;
+        case 23:
+        timezoneMinutes = "23"
+        break;
+        case 24:
+        timezoneMinutes = "24"
+        break;
+        case 25:
+        timezoneMinutes = "25"
+        break;
+        case 26:
+        timezoneMinutes = "26"
+        break;
+        case 27:
+        timezoneMinutes = "27"
+        break;
+        case 28:
+        timezoneMinutes = "28"
+        break;
+        case 29:
+        timezoneMinutes = "29"
+        break;
+        case 30:
+        timezoneMinutes = "30"
+        break;
+        case 31:
+        timezoneMinutes = "31"
+        break;
+        case 32:
+        timezoneMinutes = "32"
+        break;
+        case 33:
+        timezoneMinutes = "33"
+        break;
+        case 34:
+        timezoneMinutes = "34"
+        break;
+        case 35:
+        timezoneMinutes = "35"
+        break;
+        case 36:
+        timezoneMinutes = "36"
+        break;
+        case 37:
+        timezoneMinutes = "37"
+        break;
+        case 38:
+        timezoneMinutes = "38"
+        break;
+        case 39:
+        timezoneMinutes = "39"
+        break;
+        case 40:
+        timezoneMinutes = "40"
+        break;
+        case 41:
+        timezoneMinutes = "41"
+        break;
+        case 42:
+        timezoneMinutes = "42"
+        break;
+        case 43:
+        timezoneMinutes = "43"
+        break;
+        case 44:
+        timezoneMinutes = "44"
+        break;
+        case 45:
+        timezoneMinutes = "45"
+        break;
+        case 46:
+        timezoneMinutes = "46"
+        break;
+        case 47:
+        timezoneMinutes = "47"
+        break;
+        case 48:
+        timezoneMinutes = "48"
+        break;
+        case 49:
+        timezoneMinutes = "49"
+        break;
+        case 50:
+        timezoneMinutes = "50"
+        break;
+        case 51:
+        timezoneMinutes = "51"
+        break;
+        case 52:
+        timezoneMinutes = "52"
+        break;
+        case 53:
+        timezoneMinutes = "53"
+        break;
+        case 54:
+        timezoneMinutes = "54"
+        break;
+        case 55:
+        timezoneMinutes = "55"
+        break;
+        case 56:
+        timezoneMinutes = "56"
+        break;
+        case 57:
+        timezoneMinutes = "57"
+        break;
+        case 58:
+        timezoneMinutes = "58"
+        break;
+        case 59:
+        timezoneMinutes = "59"
+        break;
       }
       var timezoneError = "Error. List of timezones available: `UTC | AEST | BST | EST | MDT | MST | PST`";
         if (!args[1]) {
