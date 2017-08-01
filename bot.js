@@ -45,17 +45,31 @@ embedHelp.setAuthor("TempBot", "http://i.imgur.com/JOUdoSf.png")
 .setThumbnail("http://i.imgur.com/IjgeTrM.png")
 .addField("-avatar", "Replies with your Discord avatar in case you lost it. Usage: `-avatar`")
 .addField("-count", "Replies with if your message is over 48 characters. Usage: `-count [message]`")
+.addField("-serverinfo", "Get the stats of the current server. Usage: `-serverinfo`")
+.addField("-purge", "Deletes the past 100 messages. Cannot delete messages over 2 weeks old. Requires `Admin` Role. Usage: `-purge`")
+.addField("-timezone", "Replies with the current time in a timezone. Usage: `-timezone [timezone abbreviation]` (W.I.P)")
+.addField("-8ball", "Responds with a magical... reponse. Usage: `-8ball [question]`")
+.addField("-calculate", "Adds, Subtracts, Multiplies and Divides with up to 3 numbers. Usage: `-calculate [number] [symbol] [number]`")
 //.addField("-cast", "Adds a 'Filming' role to the mentioned user. Usage: `-cast [@username]` (Disabled Currently)")
 //.addField("-wrapup", "Removes the 'Filming' role from the mentioned user. Usage: `-wrapup [@username]` (Disabled Currently)")
-.addField("-purge", "Deletes the past 100 messages. Cannot delete messages over 2 weeks old. Requires `Admin` Role. Usage: `-purge`")
-.addField("-timezone", "Replies with the current time in a timezone. Usage: `-timezone [timezone abbreviation]`")
-.addField("-8ball", "Responds with a magical... reponse. Usage: `-8ball [question]`")
 .setFooter("beep boop REEEEEEE")
 .setTimestamp()
 
 client.on('ready', () => {
   console.log('Bot Started.');
   client.user.setGame("-help");
+});
+
+client.on('guildMemberAdd', member => {
+  const channelGeneral = member.guild.channels.find("name", "general");
+  if (!channelGeneral) return;
+  channelGeneral.send(`Welcome ${member} to the server!`)
+});
+
+client.on('guildMemberRemove', member => {
+  const channelGeneral = member.guild.channels.find("name", "general");
+  if (!channelGeneral) return;
+  channelGeneral.send(`Farewell ${member}.`)
 });
 
 client.on('message', message => {
@@ -79,9 +93,9 @@ client.on('message', message => {
     case "count":
       var messageCount = message.content.length - 7;
       if (messageCount <= 48) {
-        message.reply("It fits. *(Character Count: `" + messageCount + "`)*")
+        message.reply("It fits.\n*(Character Count: `" + messageCount + "`)*")
       } else {
-        message.reply("Too long, try shortening it or breaking it into multiple lines. *(Character Count: `" + messageCount + "`)*")
+        message.reply("Too long, try shortening it or breaking it into multiple lines.\n*(Character Count: `" + messageCount + "`)*")
       }
       break;
     case "avatar":
@@ -92,7 +106,7 @@ client.on('message', message => {
         message.reply(userMentioned.avatarURL)
       }
       break;
-    case "serverinfo":
+    case "serverinfo": case "info":
       var embedServerInfo = new Discord.RichEmbed();
       embedServerInfo.addField("Server Name", message.guild.name)
       .setColor("7289DA")
@@ -104,8 +118,8 @@ client.on('message', message => {
       message.channel.sendEmbed(embedServerInfo)
       break;
     case "help":
-      //message.author.sendEmbed(embedHelp);
       message.channel.sendEmbed(embedHelp);
+      //message.author.sendEmbed(embedHelp);
       //message.reply("A list of my commands has been sent to your Private Messages.")
       break;
     case "purge":
@@ -116,11 +130,11 @@ client.on('message', message => {
         message.reply("You do not have the required role to use this command.")
       }
       break;
-    case "timezone":
+    case "timezone": case "tz":
       var timezoneGet = new Date();
       timezoneHours = timezoneGet.getUTCHours();
-      timezoneMins = timezoneGet.getUTCMinutes();
-      switch (timezoneMins) {
+      timezoneMinutes = timezoneGet.getUTCMinutes();
+      switch (timezoneMinutes) {
         case 0:
         timezoneMinutes = "00"
         break;
@@ -302,13 +316,15 @@ client.on('message', message => {
         timezoneMinutes = "59"
         break;
       }
-      var timezoneError = "Error. List of timezones available: `UTC | AEST | BST | EST | MDT | MST | PST`";
+      var timezoneError = "Error. List of timezones available:\n`UTC | AEST | BST | EST | MDT | MST | PST | GMT`";
         if (!args[1]) {
           message.channel.send(timezoneError)
         } else {
         switch (args[1].toUpperCase()) {
           // If the Timezone is ahead of UTC, set timezoneAhead = 1.
           case "UTC":
+            break;
+          case "GMT":
             break;
           case "AEST":
             var timezoneHours = timezoneHours + 10;
@@ -361,12 +377,88 @@ client.on('message', message => {
           }
         }
         break;
-      case "task":
-        if (!args[3]) {
-          message.channel.send("Error.")
-        } else {
-
+      case "calculate": case "calc":
+        if (!args[4]) {
+          var calculateNumberOne = args[1];
+          var calculateNumberTwo = args[3];
+          switch (args[2]) {
+            case "+": case "add": case "plus":
+              var calculateTotal = Number(calculateNumberOne) + Number(calculateNumberTwo)
+              break;
+            case "-": case "take": case "minus": case "subtract":
+              var calculateTotal = Number(calculateNumberOne) - Number(calculateNumberTwo)
+              break;
+            case "x": case "*": case "times":
+              var calculateTotal = Number(calculateNumberOne) * Number(calculateNumberTwo)
+              break;
+            case "/": case "divide": case "divided by":
+              var calculateTotal = Number(calculateNumberOne) / Number(calculateNumberTwo)
+              break;
+            case "%":
+              var calculateTotal = Number(calculateNumberOne) % Number(calculateNumberTwo)
+              break;
+            default: message.channel.send("Error.");
+          }
         }
+        else if (!args[6]) {
+          var calculateNumberOne = args[1];
+          var calculateNumberTwo = args[3];
+          var calculateNumberThree = args[5];
+          switch (args[2]) {
+            case "+": case "add": case "plus":
+              var calculateTotal = Number(calculateNumberOne) + Number(calculateNumberTwo)
+              break;
+            case "-": case "take": case "minus": case "subtract":
+              var calculateTotal = Number(calculateNumberOne) - Number(calculateNumberTwo)
+              break;
+            case "x": case "*": case "times":
+              var calculateTotal = Number(calculateNumberOne) * Number(calculateNumberTwo)
+              break;
+            case "/": case "divide": case "divided by":
+              var calculateTotal = Number(calculateNumberOne) / Number(calculateNumberTwo)
+              break;
+            case "%":
+              var calculateTotal = Number(calculateNumberOne) % Number(calculateNumberTwo)
+              break;
+            default: message.channel.send("Error.");
+          }
+          switch (args[4]) {
+            case "+": case "add": case "plus":
+              var calculateTotal = Number(calculateTotal) + Number(calculateNumberThree)
+              break;
+            case "-": case "take": case "minus": case "subtract":
+              var calculateTotal = Number(calculateTotal) - Number(calculateNumberThree)
+              break;
+            case "x": case "*": case "times":
+              var calculateTotal = Number(calculateTotal) * Number(calculateNumberThree)
+              break;
+            case "/": case "divide": case "divided by":
+              var calculateTotal = Number(calculateTotal) / Number(calculateNumberThree)
+              break;
+            case "%":
+              var calculateTotal = Number(calculateTotal) % Number(calculateNumberThree)
+              break;
+            default: message.channel.send("Error.");
+          }
+        }
+        else {
+          message.reply("Error.")
+        }
+        message.reply(calculateTotal)
+        break;
+    /*case "task":
+      const channelTasks = member.guild.channels.find("name", "tasks");
+      if (!channelTasks) return;
+      if (args[3]) {
+        switch (args[2].toUpperCase()) {
+          case WRITER:
+            channelTasks.send("**" + args[1] + "**" + "\nWriter: " + args[2])
+          break;
+        }
+      } else {
+        message.reply("Error.")
+      }
+    break;*/
   }
   /*if(commandIs('cast', message)){
     let actorMember = message.guild.member(message.mentions.users.first());
