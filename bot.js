@@ -406,7 +406,7 @@ client.on('message', message => {
         timezoneMinutes = "59"
         break;
       }
-      var timezoneError = "Error. List of timezones available:\n`UTC | GMT | PST | MST | PDT | CST | MDT | CDT | EST | EDT | BST | EET | CEST | AEST | AEDT | NZST | NZDT`";
+      var timezoneError = "Error.";
       if (!args[1]) {
         message.reply(timezoneError)
       }
@@ -414,62 +414,137 @@ client.on('message', message => {
         var timezoneABB = args[1].toUpperCase();
         switch (args[1].toUpperCase()) {
           // If UTC is ahead of the Timezone, set timezoneAhead = false.
-          case "PST":
+          case "AOE": case "Y":
+            var timezoneHours = timezoneHours - 12;
+            var timezoneAhead = false;
+            var timezoneExists = true;
+            break;
+          case "NUT": case "SST": case "X":
+            var timezoneHours = timezoneHours - 11;
+            var timezoneAhead = false;
+            var timezoneExists = true;
+            break;
+          case "CKT": case "HAST": case "TAHT": case "W":
+            var timezoneHours = timezoneHours - 10;
+            var timezoneAhead = false;
+            var timezoneExists = true;
+            break;
+          case "V": case "AKST": case "GAMT": case "HADT":
+            var timezoneHours = timezoneHours - 9;
+            var timezoneAhead = false;
+            var timezoneExists = true;
+            break;
+          case "PST": case "AKDT": case "U":
             var timezoneHours = timezoneHours - 8;
             var timezoneAhead = false;
             var timezoneExists = true;
             break;
-          case "MST": case "PDT":
+          case "MST": case "PDT": case "T":
             var timezoneHours = timezoneHours - 7;
             var timezoneAhead = false;
             var timezoneExists = true;
             break;
-          case "CST": case "MDT":
+          case "CST": case "MDT": case "EAST": case "GALT": case "S":
             var timezoneHours = timezoneHours - 6;
             var timezoneAhead = false;
             var timezoneExists = true;
             break;
-          case "CDT": case "EST":
+          case "CDT": case "ACT": case "CIST": case "COT": case "EASST": case "ECT": case "EST": case "PET": case "R":
             var timezoneHours = timezoneHours - 5;
             var timezoneAhead = false;
             var timezoneExists = true;
             break;
-          case "EDT":
+          case "AMT": case "AST": case "BOT": case "CDT": case "CIDST": case "CLT": case "FKT": case "GYT": case "PYT": case "Q": case "VET":
             var timezoneHours = timezoneHours - 4;
             var timezoneAhead = false;
             var timezoneExists = true;
             break;
-          // If the Timezone is ahead of UTC, set timezoneAhead = 1.
+          case "PMST": case "ADT": case "AMST": case "ART": case "BRT": case "CLST": case "FKST": case "GFT": case "P": case "PYST": case "ROTT": case "SRT": case "UYT": case "WARST": case "WGT":
+            var timezoneHours = timezoneHours - 3;
+            var timezoneAhead = false;
+            var timezoneExists = true;
+            break;
+          case "O": case "BRST": case "FNT": case "GST": case "PMDT": case "UYST": case "WGST":
+            var timezoneHours = timezoneHours - 2;
+            var timezoneAhead = false;
+            var timezoneExists = true;
+            break;
+          case "AZOT": case "CVT": case "EGT": case "N":
+            var timezoneHours = timezoneHours - 1;
+            var timezoneAhead = false;
+            var timezoneExists = true;
+            break;
+          // If the Timezone is ahead of UTC, set timezoneAhead = true.
           case "UTC": case "GMT":
             var timezoneExists = true;
             break;
-          case "BST":
+          case "A": case "BST": case "CET": case "IST": case "WAT": case "WEST": case "WST":
             var timezoneHours = timezoneHours + 1;
             var timezoneAhead = true;
             var timezoneExists = true;
             break;
-          case "EET": case "CEST":
+          case "B": case "CAT": case "CEST": case "EET": case "IST": case "SAST": case "WAST":
             var timezoneHours = timezoneHours + 2;
             var timezoneAhead = true;
             var timezoneExists = true;
             break;
-          case "AEST":
+          case "C": case "ADT": case "AST": case "EAT": case "EEST": case "FET": case "IDT": case "MSK": case "SYOT": case "TRT":
+            var timezoneHours = timezoneHours + 3;
+            var timezoneAhead = true;
+            var timezoneExists = true;
+            break;
+          case "D": case "AMT": case "AZT": case "GET": case "GST": case "KUYT": case "MSD": case "MUT": case "RET": case "SAMT": case "SCT":
+            var timezoneHours = timezoneHours + 4;
+            var timezoneAhead = true;
+            var timezoneExists = true;
+            break;
+          case "E": case "AMST": case "AQTT": case "AZST": case "MAWT": case "MVT": case "ORAT": case "PKT": case "TFT": case "TJT": case "TMT": case "UZT": case "YEKT":
+            var timezoneHours = timezoneHours + 5;
+            var timezoneAhead = true;
+            var timezoneExists = true;
+            break;
+          case "F": case "ALMT": case "BTT": case "IOT": case "KGT": case "NOVT": case "OMST": case "QYZT": case "VOST": case "YEKST":
+            var timezoneHours = timezoneHours + 6;
+            var timezoneAhead = true;
+            var timezoneExists = true;
+            break;
+          case "G": case "CXT": case "DAVT": case "HOVT": case "ICT": case "KRAT": case "NOVST": case "OMSST": case "WIB":
+            var timezoneHours = timezoneHours + 7;
+            var timezoneAhead = true;
+            var timezoneExists = true;
+            break;
+          case "H": case "AWST": case "BNT": case "CAST": case "HKT": case "HOVST": case "IRKT": case "KRAST": case "MYT": case "PHT": case "SGT": case "ULAT": case "WITA":
+            var timezoneHours = timezoneHours + 8;
+            var timezoneAhead = true;
+            var timezoneExists = true;
+            break;
+          case "I": case "CHOST": case "AWDT": case "IRKST": case "JST": case "KST": case "PWT": case "TLT": case "ULAST": case "WIT": case "YAKT":
+            var timezoneHours = timezoneHours + 9;
+            var timezoneAhead = true;
+            var timezoneExists = true;
+            break;
+          case "K": case "AEST": case "CHUT": case "CHST": case "DDUT": case "PGT": case "VLAT": case "YAKST": case "YAPT":
             var timezoneHours = timezoneHours + 10;
             var timezoneAhead = true;
             var timezoneExists = true;
             break;
-          case "AEDT":
+          case "L": case "AEDT": case "KOST": case "LHDT": case "MAGT": case "NCT": case "NFT": case "PONT": case "SAKT": case "SBT": case "SRET": case "VLAST": case "VUT":
             var timezoneHours = timezoneHours + 11;
             var timezoneAhead = true;
             var timezoneExists = true;
             break;
-          case "NZST":
+          case "M": case "ANAST": case "ANAT": case "FJT": case "GILT": case "MAGST": case "MHT": case "NRT": case "PETST": case "PETT": case "TVT": case "WAKT": case "WFT":
             var timezoneHours = timezoneHours + 12;
             var timezoneAhead = true;
             var timezoneExists = true;
             break;
-          case "NZDT":
+          case "NZDT": case "FJST": case "PHOT": case "TKT": case "TOT": case "WST":
             var timezoneHours = timezoneHours + 13;
+            var timezoneAhead = true;
+            var timezoneExists = true;
+            break;
+          case "LINT": case "TOST":
+            var timezoneHours = timezoneHours + 14;
             var timezoneAhead = true;
             var timezoneExists = true;
             break;
@@ -479,11 +554,9 @@ client.on('message', message => {
             return;
         }
         if (timezoneExists = true) {
-          if (timezoneAhead = false) {
             if (timezoneHours > 24) {
               var timezoneHours = timezoneHours - 24;
             }
-          }
           else {
             if (timezoneHours < 0) {
               var timezoneHours = timezoneHours + 24;
