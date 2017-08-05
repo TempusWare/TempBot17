@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const translate = require('google-translate-api');
 const client = new Discord.Client();
 const PREFIX = "-";
 
@@ -25,6 +26,18 @@ var responses = [
   "Very doubtful.",
 ];
 
+var rps = [
+  "Rock",
+  "Paper",
+  "Scissors",
+];
+
+/*var cardjitsu = [
+  "FIRE",
+  "WATER",
+  "SNOW",
+];*/
+
 function perms(array) {
   return array.map(function(item){
     return item["name"]
@@ -43,31 +56,32 @@ embedHelp.setAuthor("TempBot", "http://i.imgur.com/JOUdoSf.png")
 .setTitle("List of available commands:")
 .setColor(0x78F7FE)
 .setThumbnail("http://i.imgur.com/IjgeTrM.png")
-.addField("-avatar", "Replies with your Discord avatar in case you lost it. Usage: `-avatar`")
+.addField("-avatar", "Replies with your Discord avatar in case you lost it. Usage: `-avatar [user]`")
 .addField("-count", "Replies with if your message is over 48 characters. Usage: `-count [message]`")
 .addField("-serverinfo", "Get the stats of the current server. Usage: `-serverinfo`")
 .addField("-purge", "Deletes the past 100 messages. Cannot delete messages over 2 weeks old. Requires `Admin` Role. Usage: `-purge`")
-.addField("-timezone", "Replies with the current time in a timezone. Usage: `-timezone [timezone abbreviation]` (W.I.P)")
+.addField("-timezone", "Replies with the current time in a timezone. Usage: `-timezone [timezone abbreviation]`")
 .addField("-8ball", "Responds with a magical... reponse. Usage: `-8ball [question]`")
 .addField("-calculate", "Adds, Subtracts, Multiplies and Divides with up to 3 numbers. Usage: `-calculate [number] [symbol] [number]`")
+.addField("-translate", "Translate words or phrases from different languages. Usage: `-translate [languageFrom/auto] [languageTo] [word/phrase]` (WIP)")
+.addField("-rps", "Plays a game of Rock Paper Scissors. Usage: `-rps [rock/paper/scissors]`")
 //.addField("-cast", "Adds a 'Filming' role to the mentioned user. Usage: `-cast [@username]` (Disabled Currently)")
 //.addField("-wrapup", "Removes the 'Filming' role from the mentioned user. Usage: `-wrapup [@username]` (Disabled Currently)")
-.setFooter("beep boop REEEEEEE")
-.setTimestamp()
+.setFooter("beep boop REEEEEEE | Last Updated: 05/08/17")
 
 client.on('ready', () => {
   console.log('Bot Started.');
-  client.user.setGame("-help");
+  client.user.setGame("Beep Boop | -help");
 });
 
 client.on('guildMemberAdd', member => {
-  const channelGeneral = member.guild.channels.find("name", "general");
+  var channelGeneral = member.guild.channels.find("name", "general");
   if (!channelGeneral) return;
   channelGeneral.send(`Welcome ${member} to the server!`)
 });
 
 client.on('guildMemberRemove', member => {
-  const channelGeneral = member.guild.channels.find("name", "general");
+  var channelGeneral = member.guild.channels.find("name", "general");
   if (!channelGeneral) return;
   channelGeneral.send(`Farewell ${member}.`)
 });
@@ -90,6 +104,82 @@ client.on('message', message => {
         message.reply("Error.")
       }
       break;
+    case "rolldice": case "dice":
+      message.reply(Math.floor(Math.random() * 6) + 1)
+      break;
+    case "rps": case "spr":
+      if (args[1]) {
+        var rpsOpponent = args[1].toLowerCase();
+        var rpsChallenger = rps[Math.floor(Math.random() * rps.length)];
+        switch (rpsOpponent) {
+          case "rock":
+            if (rpsChallenger === "Paper") {message.reply(rpsChallenger + " | I Win!")}
+            else if (rpsChallenger === "Rock") {message.reply(rpsChallenger + " | It's a tie!")}
+            else {message.reply(rpsChallenger + " | You win!")}
+            break;
+          case "paper":
+            if (rpsChallenger === "Scissors") {message.reply(rpsChallenger + " | I Win!")}
+            else if (rpsChallenger === "Paper") {message.reply(rpsChallenger + " | It's a tie!")}
+            else {message.reply(rpsChallenger + " | You win!")}
+            break;
+          case "scissors":
+            if (rpsChallenger === "Rock") {message.reply(rpsChallenger + " | I Win!")}
+            else if (rpsChallenger === "Scissors") {message.reply(rpsChallenger + " | It's a tie!")}
+            else {message.reply(rpsChallenger + " | You win!")}
+            break;
+          default: message.reply("Error. What is this, Card-Jitsu? That's not an allowed choice!")
+        }
+      } else {
+        message.reply("Error.")
+      }
+      break;
+    /*case "cardjitsu":
+      if (args[1]) {
+        if (args[1] === "play") {
+          var cardjitsuOpponentElement = args[2].toUpperCase();
+          var cardjitsuChallengerElement = cardjitsu[Math.floor(Math.random() * cardjitsu.length)];
+          var cardjitsuOpponentPowerNumber = Math.floor(Math.random() * 10) + 1;
+          var cardjitsuChallengerPowerNumber = Math.floor(Math.random() * 10) + 1;
+          //var cardjitsuOpponentColour = cardjitsuColour[Math.floor(Math.random() * cardjitsuColour.length)];
+          //var cardjitsuChallengerColour = cardjitsuColour[Math.floor(Math.random() * cardjitsuColour.length)];
+          // Elements
+          switch (cardjitsuOpponentElement) {
+            case "FIRE":
+              if (cardjitsuChallengerElement === "WATER") {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | I Win!")}
+              else if (cardjitsuChallengerElement === "FIRE" && cardjitsuOpponentPowerNumber > cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | You Win!"); cardjitsuPoints++}
+              else if (cardjitsuChallengerElement === "FIRE" && cardjitsuOpponentPowerNumber < cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | I Win!")}
+              else if (cardjitsuChallengerElement === "FIRE" && cardjitsuOpponentPowerNumber == cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | It's a tie!")}
+              else {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | You Win!"); cardjitsuPoints++}
+              break;
+            case "WATER":
+              if (cardjitsuChallengerElement === "SNOW") {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | I Win!")}
+              else if (cardjitsuChallengerElement === "WATER" && cardjitsuOpponentPowerNumber > cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | You Win!"); cardjitsuPoints++}
+              else if (cardjitsuChallengerElement === "WATER" && cardjitsuOpponentPowerNumber < cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | I Win!")}
+              else if (cardjitsuChallengerElement === "WATER" && cardjitsuOpponentPowerNumber == cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | It's a tie!")}
+              else {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | You Win!"); cardjitsuPoints++}
+              break;
+            case "SNOW":
+              if (cardjitsuChallengerElement === "FIRE") {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | I Win!")}
+              else if (cardjitsuChallengerElement === "SNOW" && cardjitsuOpponentPowerNumber > cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | You Win!"); cardjitsuPoints++}
+              else if (cardjitsuChallengerElement === "SNOW" && cardjitsuOpponentPowerNumber < cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | I Win!")}
+              else if (cardjitsuChallengerElement === "SNOW" && cardjitsuOpponentPowerNumber == cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | It's a tie!")}
+              else {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | You Win!"); cardjitsuPoints++}
+              break;
+            default: message.reply("Error: 001")
+          }
+        }
+        else if (args[1] === "points") {
+          message.reply("Points: " + cardjitsuPoints)
+        }
+        else if (args[1] === "reset") {
+          var cardjitsuPoints = 0;
+          message.reply("Reset Card-Jitsu.")
+        }
+        else {
+          message.reply("Error: 002")
+        }
+      }
+    break;*/
     case "count":
       var messageCount = message.content.length - 7;
       if (messageCount <= 48) {
@@ -132,8 +222,8 @@ client.on('message', message => {
       break;
     case "timezone": case "tz":
       var timezoneGet = new Date();
-      timezoneHours = timezoneGet.getUTCHours();
-      timezoneMinutes = timezoneGet.getUTCMinutes();
+      var timezoneHours = timezoneGet.getUTCHours();
+      var timezoneMinutes = timezoneGet.getUTCMinutes();
       switch (timezoneMinutes) {
         case 0:
         timezoneMinutes = "00"
@@ -316,68 +406,107 @@ client.on('message', message => {
         timezoneMinutes = "59"
         break;
       }
-      var timezoneError = "Error. List of timezones available:\n`UTC | AEST | BST | EST | MDT | MST | PST | GMT`";
-        if (!args[1]) {
-          message.channel.send(timezoneError)
-        } else {
+      var timezoneError = "Error. List of timezones available:\n`UTC | GMT | PST | MST | PDT | CST | MDT | CDT | EST | EDT | BST | EET | CEST | AEST | AEDT | NZST | NZDT`";
+      if (!args[1]) {
+        message.reply(timezoneError)
+      }
+      else {
+        var timezoneABB = args[1].toUpperCase();
         switch (args[1].toUpperCase()) {
+          // If UTC is ahead of the Timezone, set timezoneAhead = false.
+          case "PST":
+            var timezoneHours = timezoneHours - 8;
+            var timezoneAhead = false;
+            var timezoneExists = true;
+            break;
+          case "MST": case "PDT":
+            var timezoneHours = timezoneHours - 7;
+            var timezoneAhead = false;
+            var timezoneExists = true;
+            break;
+          case "CST": case "MDT":
+            var timezoneHours = timezoneHours - 6;
+            var timezoneAhead = false;
+            var timezoneExists = true;
+            break;
+          case "CDT": case "EST":
+            var timezoneHours = timezoneHours - 5;
+            var timezoneAhead = false;
+            var timezoneExists = true;
+            break;
+          case "EDT":
+            var timezoneHours = timezoneHours - 4;
+            var timezoneAhead = false;
+            var timezoneExists = true;
+            break;
           // If the Timezone is ahead of UTC, set timezoneAhead = 1.
-          case "UTC":
-            break;
-          case "GMT":
-            break;
-          case "AEST":
-            var timezoneHours = timezoneHours + 10;
-            var timezoneAhead = 1;
+          case "UTC": case "GMT":
+            var timezoneExists = true;
             break;
           case "BST":
             var timezoneHours = timezoneHours + 1;
-            var timezoneAhead = 1;
+            var timezoneAhead = true;
+            var timezoneExists = true;
             break;
-          // If UTC is ahead of the Timezone, set timezoneAhead = 0.
-          case "CST":
-            var timezoneHours = timezoneHours - 5;
-            var timezoneAhead = 0;
+          case "EET": case "CEST":
+            var timezoneHours = timezoneHours + 2;
+            var timezoneAhead = true;
+            var timezoneExists = true;
             break;
-          case "EST":
-            var timezoneHours = timezoneHours - 4;
-            var timezoneAhead = 0;
+          case "AEST":
+            var timezoneHours = timezoneHours + 10;
+            var timezoneAhead = true;
+            var timezoneExists = true;
             break;
-          case "MDT":
-            var timezoneHours = timezoneHours - 6;
-            var timezoneAhead = 0;
+          case "AEDT":
+            var timezoneHours = timezoneHours + 11;
+            var timezoneAhead = true;
+            var timezoneExists = true;
             break;
-          case "MST":
-            var timezoneHours = timezoneHours - 7;
-            var timezoneAhead = 0;
+          case "NZST":
+            var timezoneHours = timezoneHours + 12;
+            var timezoneAhead = true;
+            var timezoneExists = true;
             break;
-          case "PST":
-            var timezoneHours = timezoneHours - 7;
-            var timezoneAhead = 0;
+          case "NZDT":
+            var timezoneHours = timezoneHours + 13;
+            var timezoneAhead = true;
+            var timezoneExists = true;
             break;
-          default: message.channel.send(timezoneError)
-          }
-          if (timezoneAhead == 1) {
+          default:
+            var timezoneExists = false;
+            message.reply(timezoneError);
+            return;
+        }
+        if (timezoneExists = true) {
+          if (timezoneAhead = false) {
             if (timezoneHours > 24) {
               var timezoneHours = timezoneHours - 24;
             }
-          } else {
+          }
+          else {
             if (timezoneHours < 0) {
               var timezoneHours = timezoneHours + 24;
             }
           }
-          timezoneABB = args[1].toUpperCase();
-          if (timezoneHours > 12) {
+          if (timezoneHours > 12 && timezoneHours < 24) {
             var timezoneHours = timezoneHours - 12;
             message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"pm " + timezoneABB)
-          } else if (timezoneHours == 12) {
+          }
+          else if (timezoneHours == 12) {
             message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"pm " + timezoneABB)
-          } else {
+          }
+          else if (timezoneHours == 24) {
+            var timezoneHours = 12;
+            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"am " + timezoneABB)
+          }
+          else {
             message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"am " + timezoneABB)
           }
         }
-        break;
-      case "calculate": case "calc":
+      }
+      break;
+    case "calculate": case "calc":
         if (!args[4]) {
           var calculateNumberOne = args[1];
           var calculateNumberTwo = args[3];
@@ -446,6 +575,29 @@ client.on('message', message => {
         }
         message.reply(calculateTotal)
         break;
+    case "translate":
+      if (!args[2]) {
+        message.reply("Error.")
+      }
+      else if (args[1] === "auto") {
+        var translateContent = message.content;
+        translateContent = translateContent.substring(1 + 9 + 1 + 4 + 1 + args[2].length);
+        translate(translateContent, {to: args[2]}).then(res => {
+          message.reply("Translated From **" + res.from.language.iso + "**: \n" + res.text);
+            }).catch(err => {
+            console.error(err);
+          });
+      }
+      else {
+        var translateContent = message.content;
+        translateContent = translateContent.substring(1 + 9 + 1 + args[1].length + 1 + args[2].length);
+        translate(translateContent, {from: args[1], to: args[2]}).then(res => {
+          message.reply("Translated From **" + args[1] + "**: \n" + res.text);
+        }).catch(err => {
+          console.error(err);
+        });
+      }
+      break;
     /*case "task":
       const channelTasks = member.guild.channels.find("name", "tasks");
       if (!channelTasks) return;

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/TempusWare/TempBot#readme",
   "dependencies": {
-    "discord.js": "^11.1.0"
+    "discord.js": "^11.1.0",
+    "google-translate-api": "^2.3.0"
   }
 }
