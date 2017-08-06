@@ -533,7 +533,7 @@ client.on('message', message => {
             var timezoneAhead = true;
             var timezoneExists = true;
             break;
-          case "M": case "ANAST": case "ANAT": case "FJT": case "GILT": case "MAGST": case "MHT": case "NRT": case "PETST": case "PETT": case "TVT": case "WAKT": case "WFT":
+          case "M": case "ANAST": case "ANAT": case "FJT": case "GILT": case "MAGST": case "MHT": case "NRT": case "PETST": case "PETT": case "TVT": case "WAKT": case "WFT": case "NZST":
             var timezoneHours = timezoneHours + 12;
             var timezoneAhead = true;
             var timezoneExists = true;
@@ -671,6 +671,14 @@ client.on('message', message => {
         });
       }
       break;
+    /*case "leave":
+      if (message.author.id !== "182787333169348608") {
+        message.reply("Error: leavecommand locked to Tempus")
+      } else {
+        client.guilds.filter(filter).map(g => g.leave());
+        message.reply("Correct.");
+      }
+      break;*/
     /*case "task":
       const channelTasks = member.guild.channels.find("name", "tasks");
       if (!channelTasks) return;
