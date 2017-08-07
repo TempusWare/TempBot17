@@ -224,6 +224,9 @@ client.on('message', message => {
       var timezoneGet = new Date();
       var timezoneHours = timezoneGet.getUTCHours();
       var timezoneMinutes = timezoneGet.getUTCMinutes();
+      var timezoneDay = timezoneGet.getUTCDay();
+      var timezoneDate = timezoneGet.getUTCDate();
+      var timezoneMonth = timezoneGet.getUTCMonth();
       switch (timezoneMinutes) {
         case 0:
         timezoneMinutes = "00"
@@ -556,25 +559,92 @@ client.on('message', message => {
         if (timezoneExists = true) {
             if (timezoneHours > 24) {
               var timezoneHours = timezoneHours - 24;
+              var timezoneDay = Number(timezoneDay) + 1;
+              var timezoneDate = Number(timezoneDate) + 1;
             }
           else {
             if (timezoneHours < 0) {
               var timezoneHours = timezoneHours + 24;
+              var timezoneDay = Number(timezoneDay) - 1;
+              var timezoneDate = Number(timezoneDate) - 1;
             }
+          }
+          switch (timezoneDay) {
+            case 0:
+              var timezoneDay = "Sunday"
+              break;
+            case 1:
+              var timezoneDay = "Monday"
+              break;
+            case 2:
+              var timezoneDay = "Tuesday"
+              break;
+            case 3:
+              var timezoneDay = "Wednesday"
+              break;
+            case 4:
+              var timezoneDay = "Thursday"
+              break;
+            case 5:
+              var timezoneDay = "Friday"
+              break;
+            case 6:
+              var timezoneDay = "Saturday"
+              break;
+            default:
+          }
+          switch (timezoneMonth) {
+            case 0:
+              var timezoneMonth = "January"
+              break;
+            case 1:
+              var timezoneMonth = "February"
+              break;
+            case 2:
+              var timezoneMonth = "March"
+              break;
+            case 3:
+              var timezoneMonth = "April"
+              break;
+            case 4:
+              var timezoneMonth = "May"
+              break;
+            case 5:
+              var timezoneMonth = "June"
+              break;
+            case 6:
+              var timezoneMonth = "July"
+              break;
+            case 7:
+              var timezoneMonth = "August"
+              break;
+            case 8:
+              var timezoneMonth = "September"
+              break;
+            case 9:
+              var timezoneMonth = "October"
+              break;
+            case 10:
+              var timezoneMonth = "November"
+              break;
+            case 11:
+              var timezoneMonth = "December"
+              break;
+            default:
           }
           if (timezoneHours > 12 && timezoneHours < 24) {
             var timezoneHours = timezoneHours - 12;
-            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"pm " + timezoneABB)
+            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"pm " + timezoneDay + " " + timezoneMonth + " " + timezoneDate + " " + timezoneABB)
           }
           else if (timezoneHours == 12) {
-            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"pm " + timezoneABB)
+            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"pm " + timezoneDay + " " + timezoneMonth + " " + timezoneDate + " " + timezoneABB)
           }
           else if (timezoneHours == 24) {
             var timezoneHours = 12;
-            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"am " + timezoneABB)
+            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"am " + timezoneDay + " " + timezoneMonth + " " + timezoneDate + " " + timezoneABB)
           }
           else {
-            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"am " + timezoneABB)
+            message.channel.send("It is "+timezoneHours+":"+timezoneMinutes+"am " + timezoneDay + " " + timezoneMonth + " " + timezoneDate + " " + timezoneABB)
           }
         }
       }
