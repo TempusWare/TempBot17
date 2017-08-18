@@ -65,8 +65,6 @@ embedHelp.setAuthor("TempBot", "http://i.imgur.com/JOUdoSf.png")
 .addField("-calculate", "Adds, Subtracts, Multiplies and Divides with up to 3 numbers. Usage: `-calculate [number] [symbol] [number]` (Disabled Currently)")
 .addField("-translate", "Translate words or phrases from different languages. Usage: `-translate [languageFrom/auto] [languageTo] [word/phrase]` (WIP)")
 .addField("-rps", "Plays a game of Rock Paper Scissors. Usage: `-rps [rock/paper/scissors]`")
-//.addField("-cast", "Adds a 'Filming' role to the mentioned user. Usage: `-cast [@username]` (Disabled Currently)")
-//.addField("-wrapup", "Removes the 'Filming' role from the mentioned user. Usage: `-wrapup [@username]` (Disabled Currently)")
 .setFooter("beep boop REEEEEEE | Last Updated: 05/08/17")
 
 client.on('ready', () => {
@@ -88,6 +86,20 @@ client.on('guildMemberRemove', member => {
 
 client.on('message', message => {
   if (message.author.equals(client.user)) return;
+
+  if (message.guild.id == "281617786625720321") {
+    var filterMessage = message.content.toLowerCase();
+    if (
+      filterMessage.includes("badword") ||
+      filterMessage.includes("shit") ||
+      filterMessage.includes("ass") ||
+      filterMessage.includes("fuck") ||
+      filterMessage.includes("discord.gg")
+    ) {
+      message.reply("No Swearing");
+      message.delete()
+    };
+  }
 
   if (!message.content.startsWith(PREFIX)) return;
 
@@ -608,89 +620,22 @@ client.on('message', message => {
           case "message":
             var postMessage = message.content;
             postMessage = postMessage.substring(14);
-            message.channel.send(postMessage)
+            message.channel.send(postMessage);
+            message.delete()
             break;
           case "file":
             if (!args[2]) {message.reply("Error. Code: switch {case: !args[2]}")}
             else {
               message.channel.send({files: [args[2]]})
             }
+            message.delete()
             break;
           default:
-
         }
       } else {
         message.reply("Error. Code: if (lockTempus) {}")
       }
-    /*case "calculate": case "calc":
-        if (!args[4]) {
-          var calculateNumberOne = args[1];
-          var calculateNumberTwo = args[3];
-          switch (args[2]) {
-            case "+": case "add": case "plus":
-              var calculateTotal = Number(calculateNumberOne) + Number(calculateNumberTwo)
-              break;
-            case "-": case "take": case "minus": case "subtract":
-              var calculateTotal = Number(calculateNumberOne) - Number(calculateNumberTwo)
-              break;
-            case "x": case "*": case "times":
-              var calculateTotal = Number(calculateNumberOne) * Number(calculateNumberTwo)
-              break;
-            case "/": case "divide": case "divided by":
-              var calculateTotal = Number(calculateNumberOne) / Number(calculateNumberTwo)
-              break;
-            case "%":
-              var calculateTotal = Number(calculateNumberOne) % Number(calculateNumberTwo)
-              break;
-            default: message.channel.send("Error.");
-          }
-        }
-        else if (!args[6]) {
-          var calculateNumberOne = args[1];
-          var calculateNumberTwo = args[3];
-          var calculateNumberThree = args[5];
-          switch (args[2]) {
-            case "+": case "add": case "plus":
-              var calculateTotal = Number(calculateNumberOne) + Number(calculateNumberTwo)
-              break;
-            case "-": case "take": case "minus": case "subtract":
-              var calculateTotal = Number(calculateNumberOne) - Number(calculateNumberTwo)
-              break;
-            case "x": case "*": case "times":
-              var calculateTotal = Number(calculateNumberOne) * Number(calculateNumberTwo)
-              break;
-            case "/": case "divide": case "divided by":
-              var calculateTotal = Number(calculateNumberOne) / Number(calculateNumberTwo)
-              break;
-            case "%":
-              var calculateTotal = Number(calculateNumberOne) % Number(calculateNumberTwo)
-              break;
-            default: message.channel.send("Error.");
-          }
-          switch (args[4]) {
-            case "+": case "add": case "plus":
-              var calculateTotal = Number(calculateTotal) + Number(calculateNumberThree)
-              break;
-            case "-": case "take": case "minus": case "subtract":
-              var calculateTotal = Number(calculateTotal) - Number(calculateNumberThree)
-              break;
-            case "x": case "*": case "times":
-              var calculateTotal = Number(calculateTotal) * Number(calculateNumberThree)
-              break;
-            case "/": case "divide": case "divided by":
-              var calculateTotal = Number(calculateTotal) / Number(calculateNumberThree)
-              break;
-            case "%":
-              var calculateTotal = Number(calculateTotal) % Number(calculateNumberThree)
-              break;
-            default: message.channel.send("Error.");
-          }
-        }
-        else {
-          message.reply("Error.")
-        }
-        message.reply(calculateTotal)
-        break;*/
+      break;
     case "translate":
       if (!args[2]) {
         message.reply("Error.")
@@ -713,66 +658,8 @@ client.on('message', message => {
           console.error(err);
         });
       }
-      break;
-    /*case "leave":
-      if (message.author.id !== "182787333169348608") {
-        message.reply("Error: leavecommand locked to Tempus")
-      } else {
-        client.guilds.filter(filter).map(g => g.leave());
-        message.reply("Correct.");
-      }
-      break;*/
-    /*case "task":
-      const channelTasks = member.guild.channels.find("name", "tasks");
-      if (!channelTasks) return;
-      if (args[3]) {
-        switch (args[2].toUpperCase()) {
-          case WRITER:
-            channelTasks.send("**" + args[1] + "**" + "\nWriter: " + args[2])
-          break;
-        }
-      } else {
-        message.reply("Error.")
-      }
-    break;*/
+    break;
   }
-  /*if(commandIs('cast', message)){
-    let actorMember = message.guild.member(message.mentions.users.first());
-    let actorRole = message.guild.roles.find("name", "Filming");
-    actorMember.addRole(actorRole);
-    message.channel.sendMessage(message.guild.member(message.mentions.users.first()) + " has been cast.");
-    console.log(`Added ${message.guild.member(message.mentions.users.first())} to cast.`);
-  }
-  if(commandIs('wrapup', message)){
-    let actorMember = message.guild.member(message.mentions.users.first());
-    let actorRole = message.guild.roles.find("name", "Filming");
-    actorMember.removeRole(actorRole);
-    message.channel.sendMessage(message.guild.member(message.mentions.users.first()) + " has wrapped up.");
-    console.log(`Removed ${message.guild.member(message.mentions.users.first())} from cast.`);
-  }*/
-  /*if(commandIs("settask", message)){
-    if(args.length === 1){
-      message.channel.send("You did not define an argument. Usage: `-updatetask [Title] [Role] [Username]`")
-    } else if(args.length === 4 && args[2] === "Writer"){
-      message.channel.send(args[1] + " | " + args[2] + ": " + args[3])
-    } else if(args.length === 4 && args[2] === "Filmer"){
-      message.channel.send(args[1] + " | " + args[2] + ": " + args[3])
-    } else {
-      message.channel.send("There was an error.")
-    }
-  }
-  if(commandIs("updatetask", message)){
-    if(args.length === 1){
-      message.channel.sendMessage("You did not define an argument. Usage: `-updatetask [Title] [Role] [Username]`")
-    } else if(args.length === 4){
-      let taskInfo = message.content.find("includes", args[1]);
-      message.channel.sendMessage("Found message.")
-    } else {
-      message.channel.sendMessage("Denied.")
-    }
-  }*/
 });
-
-
 
 client.login(process.env.TOKEN)
