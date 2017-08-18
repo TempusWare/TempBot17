@@ -62,7 +62,7 @@ embedHelp.setAuthor("TempBot", "http://i.imgur.com/JOUdoSf.png")
 .addField("-purge", "Deletes the past 100 messages. Cannot delete messages over 2 weeks old. Requires `Admin` Role. Usage: `-purge`")
 .addField("-timezone", "Replies with the current time in a timezone. Usage: `-timezone [timezone abbreviation]`")
 .addField("-8ball", "Responds with a magical... reponse. Usage: `-8ball [question]`")
-.addField("-calculate", "Adds, Subtracts, Multiplies and Divides with up to 3 numbers. Usage: `-calculate [number] [symbol] [number]`")
+.addField("-calculate", "Adds, Subtracts, Multiplies and Divides with up to 3 numbers. Usage: `-calculate [number] [symbol] [number]` (Disabled Currently)")
 .addField("-translate", "Translate words or phrases from different languages. Usage: `-translate [languageFrom/auto] [languageTo] [word/phrase]` (WIP)")
 .addField("-rps", "Plays a game of Rock Paper Scissors. Usage: `-rps [rock/paper/scissors]`")
 //.addField("-cast", "Adds a 'Filming' role to the mentioned user. Usage: `-cast [@username]` (Disabled Currently)")
@@ -133,53 +133,6 @@ client.on('message', message => {
         message.reply("Error.")
       }
       break;
-    /*case "cardjitsu":
-      if (args[1]) {
-        if (args[1] === "play") {
-          var cardjitsuOpponentElement = args[2].toUpperCase();
-          var cardjitsuChallengerElement = cardjitsu[Math.floor(Math.random() * cardjitsu.length)];
-          var cardjitsuOpponentPowerNumber = Math.floor(Math.random() * 10) + 1;
-          var cardjitsuChallengerPowerNumber = Math.floor(Math.random() * 10) + 1;
-          //var cardjitsuOpponentColour = cardjitsuColour[Math.floor(Math.random() * cardjitsuColour.length)];
-          //var cardjitsuChallengerColour = cardjitsuColour[Math.floor(Math.random() * cardjitsuColour.length)];
-          // Elements
-          switch (cardjitsuOpponentElement) {
-            case "FIRE":
-              if (cardjitsuChallengerElement === "WATER") {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | I Win!")}
-              else if (cardjitsuChallengerElement === "FIRE" && cardjitsuOpponentPowerNumber > cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | You Win!"); cardjitsuPoints++}
-              else if (cardjitsuChallengerElement === "FIRE" && cardjitsuOpponentPowerNumber < cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | I Win!")}
-              else if (cardjitsuChallengerElement === "FIRE" && cardjitsuOpponentPowerNumber == cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | It's a tie!")}
-              else {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | You Win!"); cardjitsuPoints++}
-              break;
-            case "WATER":
-              if (cardjitsuChallengerElement === "SNOW") {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | I Win!")}
-              else if (cardjitsuChallengerElement === "WATER" && cardjitsuOpponentPowerNumber > cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | You Win!"); cardjitsuPoints++}
-              else if (cardjitsuChallengerElement === "WATER" && cardjitsuOpponentPowerNumber < cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | I Win!")}
-              else if (cardjitsuChallengerElement === "WATER" && cardjitsuOpponentPowerNumber == cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | It's a tie!")}
-              else {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | You Win!"); cardjitsuPoints++}
-              break;
-            case "SNOW":
-              if (cardjitsuChallengerElement === "FIRE") {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | I Win!")}
-              else if (cardjitsuChallengerElement === "SNOW" && cardjitsuOpponentPowerNumber > cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | You Win!"); cardjitsuPoints++}
-              else if (cardjitsuChallengerElement === "SNOW" && cardjitsuOpponentPowerNumber < cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | I Win!")}
-              else if (cardjitsuChallengerElement === "SNOW" && cardjitsuOpponentPowerNumber == cardjitsuChallengerPowerNumber) {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | It's a tie!")}
-              else {message.reply("\n" + cardjitsuOpponentElement + " " + cardjitsuOpponentPowerNumber + "\n vs. \n" + cardjitsuChallengerElement + " " + cardjitsuChallengerPowerNumber + " | You Win!"); cardjitsuPoints++}
-              break;
-            default: message.reply("Error: 001")
-          }
-        }
-        else if (args[1] === "points") {
-          message.reply("Points: " + cardjitsuPoints)
-        }
-        else if (args[1] === "reset") {
-          var cardjitsuPoints = 0;
-          message.reply("Reset Card-Jitsu.")
-        }
-        else {
-          message.reply("Error: 002")
-        }
-      }
-    break;*/
     case "count":
       var messageCount = message.content.length - 7;
       if (messageCount <= 48) {
@@ -457,7 +410,7 @@ client.on('message', message => {
             var timezoneAhead = false;
             var timezoneExists = true;
             break;
-          case "AMT": case "AST": case "BOT": case "CDT": case "CIDST": case "CLT": case "FKT": case "GYT": case "PYT": case "Q": case "VET":
+          case "AMT": case "AST": case "BOT": case "CDT": case "CIDST": case "CLT": case "EDT": case "FKT": case "GYT": case "PYT": case "Q": case "VET":
             var timezoneHours = timezoneHours - 4;
             var timezoneAhead = false;
             var timezoneExists = true;
@@ -649,7 +602,27 @@ client.on('message', message => {
         }
       }
       break;
-    case "calculate": case "calc":
+    case "post":
+      if (message.author.id == "182787333169348608") {
+        switch (args[1]) {
+          case "message":
+            var postMessage = message.content;
+            postMessage = postMessage.substring(14);
+            message.channel.send(postMessage)
+            break;
+          case "file":
+            if (!args[2]) {message.reply("Error. Code: switch {case: !args[2]}")}
+            else {
+              message.channel.send({files: [args[2]]})
+            }
+            break;
+          default:
+
+        }
+      } else {
+        message.reply("Error. Code: if (lockTempus) {}")
+      }
+    /*case "calculate": case "calc":
         if (!args[4]) {
           var calculateNumberOne = args[1];
           var calculateNumberTwo = args[3];
@@ -717,7 +690,7 @@ client.on('message', message => {
           message.reply("Error.")
         }
         message.reply(calculateTotal)
-        break;
+        break;*/
     case "translate":
       if (!args[2]) {
         message.reply("Error.")
