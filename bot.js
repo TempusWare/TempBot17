@@ -87,6 +87,10 @@ client.on('guildMemberRemove', member => {
 client.on('message', message => {
   if (message.author.equals(client.user)) return;
 
+  if (message.content.toLowerCase() === "k") {
+    message.reply("K")
+  }
+
   if (!message.content.startsWith(PREFIX)) return;
 
   var args = message.content.substring(PREFIX.length).split(" ");
