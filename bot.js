@@ -72,7 +72,7 @@ client.on('ready', () => {
   client.user.setGame("Beep Boop | -help");
 });
 
-client.on('guildMemberAdd', member => {
+/*client.on('guildMemberAdd', member => {
   var channelGeneral = member.guild.channels.find("name", "general");
   if (!channelGeneral) return;
   channelGeneral.send(`Welcome ${member} to the server!`)
@@ -82,24 +82,10 @@ client.on('guildMemberRemove', member => {
   var channelGeneral = member.guild.channels.find("name", "general");
   if (!channelGeneral) return;
   channelGeneral.send(`Farewell ${member}.`)
-});
+});*/
 
 client.on('message', message => {
   if (message.author.equals(client.user)) return;
-
-  /*if (message.guild.id == "281617786625720321") {
-    var filterMessage = message.content.toLowerCase();
-    if (
-      filterMessage.includes("badword") ||
-      filterMessage.includes("shit") ||
-      filterMessage.includes("ass") ||
-      filterMessage.includes("fuck") ||
-      filterMessage.includes("discord.gg")
-    ) {
-      message.reply("No Swearing");
-      message.delete()
-    };
-  }*/
 
   if (!message.content.startsWith(PREFIX)) return;
 
@@ -659,6 +645,27 @@ client.on('message', message => {
         });
       }
     break;
+    /*case "hangman":
+    switch (args[1]) {
+      case "setword":
+        var hangmanWord = args[2].toLowerCase()
+        if (hangmanWord.length == 6) {
+          message.delete();
+          message.channel.send("Hangman Word has been set. Start guessing with `-hangman guess [letter]`")
+          //hangmanWord.charAt(0)
+        } else {message.reply("Try a 6 letter word. / Error.")}
+        break;
+      case "guess":
+        if (args[2].toLowerCase() === hangmanWord.charAt(0)) {
+          message.reply("Yup")
+        } else {
+          message.reply("Error.")
+        }
+        break;
+      default:
+
+    }
+    break;*/
   }
 });
 
