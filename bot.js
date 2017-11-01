@@ -67,6 +67,8 @@ embedHelp.setAuthor("TempBot", "http://i.imgur.com/JOUdoSf.png")
 .addField("-rps", "Plays a game of Rock Paper Scissors. Usage: `-rps [rock/paper/scissors]`")
 .setFooter("beep boop REEEEEEE | Last Updated: 05/08/17")
 
+var serverDeCipher = "261286578385584138";
+
 client.on('ready', () => {
   console.log('Bot Started.');
   client.user.setGame("Beep Boop | -help");
@@ -76,13 +78,13 @@ client.on('ready', () => {
   var channelGeneral = member.guild.channels.find("name", "general");
   if (!channelGeneral) return;
   channelGeneral.send(`Welcome ${member} to the server!`)
-});
+});*/
 
 client.on('guildMemberRemove', member => {
   var channelGeneral = member.guild.channels.find("name", "general");
   if (!channelGeneral) return;
   channelGeneral.send(`Farewell ${member}.`)
-});*/
+});
 
 client.on('message', message => {
   if (message.author.equals(client.user)) return;
@@ -648,6 +650,20 @@ client.on('message', message => {
           console.error(err);
         });
       }
+      case "subscribe": case "sub":
+        if (message.guild.id == serverDeCipher){
+          var roleSubscriber = message.guild.roles.find("name", "Subscriber")
+          var roleSubscriberMember = message.member;
+          roleSubscriberMember.addRole(roleSubscriber).catch(console.error);
+        }
+        break;
+      case "unsubscribe": case "unsub":
+        if (message.guild.id == serverDeCipher){
+          var roleSubscriber = message.guild.roles.find("name", "Subscriber")
+          var roleSubscriberMember = message.member;
+          roleSubscriberMember.removeRole(roleSubscriber).catch(console.error);
+        }
+        break;
     break;
     /*case "hangman":
     switch (args[1]) {
